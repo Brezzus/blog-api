@@ -1,3 +1,4 @@
+import { Verify } from "node:crypto"
 import { prisma } from "../libs/prisma"
 import bcrypt from "bcryptjs"
 
@@ -24,4 +25,22 @@ export const createUser = async ({name, email, password} : CreateUserProps) => {
         password: hashedPassword
     }
     })
+}
+
+type verifyUserProps = {
+    email:string,
+    password: string
+}
+
+export const verifyUser = async ({ email, password }: verifyUserProps) => {
+    email = email.toLowerCase()
+
+    const user = await prisma.user.findFirst({
+        where: { email }
+    })
+    if (!user) return false
+    const isMatch = await bcrypt.compareSync(password, user.password)
+    if (!isMatch) return false
+
+    return user
 }
