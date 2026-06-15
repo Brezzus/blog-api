@@ -46,7 +46,7 @@ export const signUp: RequestHandler = async (req, res) => {
         return res.status(400).json({ error: 'email já cadastrado' })
     }
 
-    const token = '123'
+    const token = createToken (newUser)
     res.status(201).json({
         message: 'Usuário criado com sucesso',
         user: {
