@@ -1,6 +1,7 @@
-import { Verify } from "node:crypto"
 import { prisma } from "../libs/prisma"
 import bcrypt from "bcryptjs"
+
+
 
 
 type CreateUserProps = {
@@ -43,4 +44,16 @@ export const verifyUser = async ({ email, password }: verifyUserProps) => {
     if (!isMatch) return false
 
     return user
+}
+
+export const getUserById = async (id: number) => {
+    return await prisma.user.findUnique({
+        where: { id },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            status: true,
+        }
+    })
 }

@@ -1,7 +1,9 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Response } from "express";
 import { z } from "zod";
 import { createUser, verifyUser } from "../services/user.service";
 import { createToken } from "../services/auth.service";
+import { ExtendedRequest } from "../types/extended-request";
+import { User } from '@prisma/client';
 
 export const signIn: RequestHandler = async (req, res) => {
     const schema = z.object({
@@ -58,6 +60,6 @@ export const signUp: RequestHandler = async (req, res) => {
     })
 }
 
-export const validate: RequestHandler = async (req, res) => {
-
+export const validate: RequestHandler = (req: ExtendedRequest, res: Response ) => {
+    res.json({ user: req.user })
 }
